@@ -1,6 +1,6 @@
 from flask import Flask, request, abort
 from linebot.v3 import WebhookHandler
-from linebot.v3.messaging import Configuration, ApiClient, MessagingApi, ReplyMessageRequest, TextMessage
+from linebot.v3.messaging import Configuration, ApiClient, MessagingApi, ReplyMessageRequest, TextMessage, MessagingApiBlob # <--- 加入 MessagingApiBlob
 from linebot.v3.webhooks import MessageEvent, AudioMessageContent
 from whisper_helper import transcribe_audio
 from summarizer import summarize_text
@@ -46,7 +46,9 @@ def handle_audio(event):
     try:
         # 使用 ApiClient 來取得內容
         with ApiClient(configuration) as api_client:
-            messaging_api = MessagingApi(api_client)
+            messaging_api = MessagingApiBlob(api_client)
+            print(f"DEBUG: Type of messaging_api: {type(messaging_api)}")
+            print(f"DEBUG: Attributes of messaging_api: {dir(messaging_api)}") # 這一行會印出很多東西
             # 使用 get_message_content 方法
             with messaging_api.get_message_content(message_id) as audio_content:
                 with open(temp_audio_path, "wb") as f:
