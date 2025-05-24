@@ -1,7 +1,7 @@
 from flask import Flask, request, abort
 from linebot.v3 import WebhookHandler
 from linebot.v3.messaging import Configuration, ApiClient, MessagingApi, ReplyMessageRequest, TextMessage
-from linebot.v3.webhooks import MessageEvent, AudioMessage
+from linebot.v3.webhooks import MessageEvent, AudioMessageContent
 
 from whisper_helper import transcribe_audio
 from summarizer import summarize_text
@@ -37,7 +37,7 @@ def callback():
     
     return "OK"
 
-@handler.add(MessageEvent, message=AudioMessage)
+@handler.add(MessageEvent, message=AudioMessageContent)
 def handle_audio(event):
     message_id = event.message.id
 
