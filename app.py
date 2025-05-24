@@ -2,7 +2,6 @@ from flask import Flask, request, abort
 from linebot.v3 import WebhookHandler
 from linebot.v3.messaging import Configuration, ApiClient, MessagingApi, ReplyMessageRequest, TextMessage
 from linebot.v3.webhooks import MessageEvent, AudioMessageContent
-
 from whisper_helper import transcribe_audio
 from summarizer import summarize_text
 import os
