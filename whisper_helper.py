@@ -1,27 +1,24 @@
-import os
-# ... 其他程式碼 ...
+import whisper
+# 如果你想使用 OpenAI API 的 Whisper 服務，則需要 from openai import OpenAI
 
-def handle_audio(event):
-    # ... 寫入音訊檔案 ...
-    with open("temp_audio.m4a", "wb") as f:
-        for chunk in audio_content.iter_content():
-            f.write(chunk)
+# 載入 Whisper 模型 (本地運行)
+# 只在文件最頂層載入一次，避免每次調用函式都重新載入
+model = whisper.load_model("base") # 或其他模型大小如 "small", "medium", "large"
 
+def transcribe_audio(filepath: str) -> str:
+    """
+    使用本地 Whisper 模型將音訊檔案轉錄為文字。
+
+    Args:
+        filepath: 音訊檔案的路徑。
+
+    Returns:
+        轉錄後的文字。
+    """
     try:
-        text = transcribe_audio("temp_audio.m4a")
-        summary = summarize_text(text)
-
-        line_bot_api.reply_message(
-            event.reply_token,
-            TextSendMessage(text=summary)
-        )
+        result = model.transcribe(filepath)
+        return result["text"]
     except Exception as e:
-        print(f"處理語音時發生錯誤: {e}")
-        line_bot_api.reply_message(
-            event.reply_token,
-            TextSendMessage(text="抱歉，語音轉文字或摘要服務發生問題。")
-        )
-    finally:
-        # 確保臨時檔案被刪除
-        if os.path.exists("temp_audio.m4a"):
-            os.remove("temp_audio.m4a")
+        print(f"Whisper 轉錄音訊時發生錯誤: {e}")
+        # 這裡可以根據需要，返回一個錯誤訊息或重新拋出異常
+        return "語音轉文字服務暫時無法使用。"
