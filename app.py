@@ -61,4 +61,4 @@ def handle_audio(event):
             print(f"臨時音訊檔案已刪除: {temp_audio_path}") # 可選：打印刪除訊息
 
 if __name__ == "__main__":
-    app.run(host="0.0.0.0", port=5000)
+    app.run(port=5000)
